@@ -1,27 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth } from 'firebase/auth';
-import firebase_app from '../../Firebase';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import QR_generator from '../../Component/QR_generator';
 
-const Home = () => {
-  const firebaseAuth = getAuth(firebase_app);
+const View_profile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate()
+  const {name} = useParams()
 
   const getUser = async (token) => {
     try {
-      const response = await axios.get("http://localhost:3001/api/user/user_info", {
-        headers: {
-          Authorization: "Bearer " + token
-        }
+      const response = await axios.get(`http://localhost:3001/api/user/${name}`, {
       });
       setUserData(response.data);
       setLoading(false);
-      navigate(`/${response.data.name}`)
     } catch (error) {
       setError("Error fetching user info");
       setLoading(false);
@@ -29,23 +22,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        user.getIdToken().then((token) => {
-          getUser(token);
-        }).catch((error) => {
-          setError("Error getting Firebase ID token");
-          setLoading(false);
-        });
-      } else {
-        console.log("No user available");
-        setLoading(false);
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
+     getUser()
   }, []);
 
 
@@ -76,15 +53,13 @@ const Home = () => {
           </>
         )}
 
-        <div className='flex mx-10 mt-4 flex-col md:flex-row justify-center  md:justify-between'>
+        <div className='flex mx-10 flex-col md:flex-row justify-center  md:justify-between'>
           <div>
-            <h1 className=' md:my-3 text-center md:text-left text-lg md:text-2xl font-bold  '>{userData.name.toUpperCase()}</h1>
+            <h1 className='mt-8 md:my-3 text-center md:text-left text-lg md:text-2xl font-bold  '>{userData.name.toUpperCase()}</h1>
             <h1 className='my-2 md:my-3 text-center md:text-left text-lg md:text-2xl font-bold  '>{userData.country.toUpperCase()}</h1>
-            <h1 className='my-2 md:my-3 text-center md:text-left text-lg md:text-2xl font-bold  '>{userData.email.toUpperCase()}</h1>
-            <h1 className='my-2 md:my-3 text-center md:text-left text-lg md:text-2xl font-bold  '>{userData.phone_number}</h1>
           </div>
 
-          <div >
+          <div className='mt-8'>
             <QR_generator/>
           </div>
         </div>
@@ -94,4 +69,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default View_profile;

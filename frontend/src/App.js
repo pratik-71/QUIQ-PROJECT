@@ -7,6 +7,7 @@ import Home from "./Pages/Home/Home";
 import { useEffect, useState } from "react";
 import firebase_app, { auth } from "./Firebase";
 import { getAuth } from "firebase/auth";
+import View_profile from "./Pages/Home/View_profile";
 
 function App() {
   const firebaseAuth = getAuth(firebase_app);
@@ -40,14 +41,17 @@ function App() {
     return ;
   }
 
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/:name" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/user/:name" element={<View_profile/>}/>
           <Route path="/login" element={<Login />} key="login" />
           <Route path="/register" element={<Register />} key="register" />
-          <Route path="/user_info" element={<User_info />} key="user_info" />
+          <Route path="/user_info" element={isLoggedIn ? <User_info /> : <Navigate to="/login" />} key="user_info" />
         </Routes>
       </BrowserRouter>
     </div>

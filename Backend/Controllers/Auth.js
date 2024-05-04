@@ -35,4 +35,16 @@ const get_user = async(req,res)=>{
      }
 }
 
-module.exports = { add_user,get_user };
+const get_profile=async(req,res)=>{
+    const name = req.params.name
+    try {
+        const data = await User.findOne({name:name}).select("name country profile_photo cover_photo")
+        if(data){
+            return res.status(200).json(data)
+        }
+     } catch (error) {
+        return res.status(400).json({error:"No user Found"})
+     }
+}
+
+module.exports = { add_user,get_user,get_profile };

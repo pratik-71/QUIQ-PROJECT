@@ -97,7 +97,7 @@ const Register = () => {
                 id="Name"
                 name="Name"
                 type="text"
-                placeholder="Enter Your Name"
+                placeholder="Enter Your Username"
                 {...register("Name", {
                   required: "Name is required",
                 })}
@@ -299,7 +299,11 @@ const Register = () => {
             </div>
 
             {/* google sign up */}
-            <div className="flex flex-col items-center justify-evenly w-full mt-2">
+            
+          </div>
+        </form>
+
+        <div className="flex flex-col items-center justify-evenly w-full mt-2">
               <p>Or sign up with</p>
               <button onClick={loginWithGoogle} className="flex mt-3 items-center appearance-none border-2 border-black rounded-xl px-4 py-1">
                 <img
@@ -310,8 +314,7 @@ const Register = () => {
                 <p className="px-3">Continue with Google</p>
               </button>
             </div>
-          </div>
-        </form>
+            
       </div>
     </div>
   );
