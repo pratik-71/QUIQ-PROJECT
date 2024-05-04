@@ -22,9 +22,15 @@ const Login = () => {
   const send_form_data = async (formData) => {
     const { Email, Password } = formData;
     try {
-      await signInWithEmailAndPassword(firebaseAuth, Email, Password);
-      window.localStorage.setItem("isLoggedIn", true);
-      navigate("/");
+      const cred = await signInWithEmailAndPassword(firebaseAuth, Email, Password);
+      if(cred){
+        window.localStorage.setItem("isLoggedIn", true);
+        console.log(cred)
+        navigate("/")
+
+      }
+
+      
     } catch (error) {
       console.log(error);
     }

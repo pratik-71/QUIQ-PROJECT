@@ -1,24 +1,62 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import firebase_app, { auth } from "../../Firebase";
 import { countryList } from "../../Data/Countrylist";
-import {getAuth,GoogleAuthProvider,signInWithPopup} from "firebase/auth"
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const navigate = useNavigate()
-  const firebaseAuth = getAuth(firebase_app)
+  const navigate = useNavigate();
+  const firebaseAuth = getAuth(firebase_app);
   const provider = new GoogleAuthProvider();
 
-  const LoginWithGoogle=async()=>{
-   await signInWithPopup(firebaseAuth,provider).then((userCred)=>{
-    if(userCred){
-      window.localStorage.setItem("isLoggedIn",true);
-      navigate("/user_info")
+  const [profileimg, setProfileImg] = useState("");
+  const [coverimg, setCoverImg] = useState("");
+
+  const convertToBase64 = (file, setImage) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log("Error" + error);
+    };
+  };
+
+
+  const sendUserData = async (uid, formData) => {
+    try {
+      const response = await axios.post("http://localhost:3001/api/user/adduser", {
+        name: formData.Name,
+        email: formData.Email,
+        phone_number: formData.Phone_number,
+        uid:uid,
+        country: formData.Country,
+        gender: formData.Gender,
+        profile_photo: profileimg,
+        cover_photo: coverimg
+      });
+      if (response) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
     }
-   })
-  }
+  };
+  
+
+  const loginWithGoogle = async (formData) => {
+    await signInWithPopup(firebaseAuth, provider).then((userCred) => {
+      if (userCred) {
+        window.localStorage.setItem("isLoggedIn", true);
+        navigate("/user_info", { state: { uid: userCred.user.uid,email:formData.Email } });
+      }
+    });
+  };
+  
 
   const {
     register,
@@ -26,14 +64,13 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const send_form_data = async (formData) => {
+  const sendFormData = async (formData) => {
     try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        formData.Email,
-        formData.Password
-      );
-      console.log(response);
+      const response = await createUserWithEmailAndPassword(auth, formData.Email, formData.Password);
+      if (response) {
+        console.log(response.user)
+        sendUserData(response.user.uid, formData);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +89,7 @@ const Register = () => {
           </span>
         </div>
 
-        <form onSubmit={handleSubmit(send_form_data)}>
+        <form onSubmit={handleSubmit(sendFormData)}>
           <div className="flex flex-wrap mx-3 mt-3">
             {/*  Name*/}
             <div className="w-full px-3 mb-3">
@@ -139,30 +176,19 @@ const Register = () => {
               )}
             </div>
 
-            {/* profile photo */}
-            <div className="w-full px-3 mb-3">
+            
+             {/* profile photo */}
+             <div className="w-full px-3 mb-3">
               <div className="flex flex-wrap justify-between">
-                <div className="w-full  mb-3 md:mb-0 md:w-1/2  md:pr-2">
+                <div className="w-full mb-3 md:mb-0 md:w-1/2 md:pr-2">
                   <label className="text-black mt-2 block">
-                    Upload Profle Photo
+                    Upload Profile Photo
                   </label>
                   <input
+                    name="profile_photo"
                     type="file"
                     accept=".png, .jpg, .jpeg"
-                    {...register("Profile_photo", {
-                      required: "Profile photo is required",
-                      validate: (value) => {
-                        const acceptedFormats = ["png", "jpg", "jpeg"];
-                        const fileExtension = value[0]?.name
-                          .split(".")
-                          .pop()
-                          .toLowerCase();
-                        if (!acceptedFormats.includes(fileExtension)) {
-                          return "Invalid file format. Only PNG and JPG are allowed.";
-                        }
-                        return true;
-                      },
-                    })}
+                    onChange={(e) => convertToBase64(e.target.files[0], setProfileImg)}
                     className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                   />
                   {errors.Profile_photo && (
@@ -173,30 +199,15 @@ const Register = () => {
                 </div>
 
                 {/* Cover photo  */}
-                <div className="w-full  mb-3 md:mb-0 md:w-1/2  md:pl-2">
-                  <label
-                    htmlFor="Cover_photo"
-                    className="text-black mt-2 block"
-                  >
+                <div className="w-full mb-3 md:mb-0 md:w-1/2 md:pl-2">
+                  <label htmlFor="Cover_photo" className="text-black mt-2 block">
                     Upload Cover Photo
                   </label>
                   <input
+                    name="cover_photo"
                     type="file"
                     accept=".png, .jpg, .jpeg"
-                    {...register("Cover_photo", {
-                      required: "cover photo is required",
-                      validate: (value) => {
-                        const acceptedFormats = ["png", "jpg", "jpeg"];
-                        const fileExtension = value[0]?.name
-                          .split(".")
-                          .pop()
-                          .toLowerCase();
-                        if (!acceptedFormats.includes(fileExtension)) {
-                          return "Invalid file format. Only PNG and JPG are allowed.";
-                        }
-                        return true;
-                      },
-                    })}
+                    onChange={(e) => convertToBase64(e.target.files[0], setCoverImg)}
                     className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                   />
                   {errors.Cover_photo && (
@@ -207,6 +218,7 @@ const Register = () => {
                 </div>
               </div>
             </div>
+
 
             <div className="w-full px-3 mb-3">
               <select
@@ -289,10 +301,11 @@ const Register = () => {
             {/* google sign up */}
             <div className="flex flex-col items-center justify-evenly w-full mt-2">
               <p>Or sign up with</p>
-              <button onClick={()=>LoginWithGoogle()} className="flex mt-3 items-center appearance-none border-2 border-black rounded-xl px-4 py-1">
+              <button onClick={loginWithGoogle} className="flex mt-3 items-center appearance-none border-2 border-black rounded-xl px-4 py-1">
                 <img
                   src="https://image.similarpng.com/very-thumbnail/2021/09/Logo-Search-Google--on-transparent-background-PNG.png"
                   className="h-8"
+                  alt="Google Logo"
                 />
                 <p className="px-3">Continue with Google</p>
               </button>
