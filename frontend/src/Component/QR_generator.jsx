@@ -13,7 +13,7 @@ const QR_generator = () => {
     return (
         <div>
             <button 
-                className='rounded-xl border-2 border-black px-3 py-1 '
+                className='duration-100 rounded-xl border-2 border-black px-5 py-2 hover:border-2 hover:scale-110 hover:bg-white hover:text-black  bg-blue-500 border-0 text-white'
                 onClick={handleButtonClick} 
             >
                 Profile QR-Code

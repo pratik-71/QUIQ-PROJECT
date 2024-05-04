@@ -53,7 +53,7 @@ const View_profile = () => {
           </>
         )}
 
-        <div className='flex mx-10 flex-col md:flex-row justify-center  md:justify-between'>
+        <div className='flex  mx-10 flex-col md:flex-row justify-center  md:justify-between'>
           <div>
             <h1 className='mt-8 md:my-3 text-center md:text-left text-lg md:text-2xl font-bold  '>{userData.name.toUpperCase()}</h1>
             <h1 className='my-2 md:my-3 text-center md:text-left text-lg md:text-2xl font-bold  '>{userData.country.toUpperCase()}</h1>
