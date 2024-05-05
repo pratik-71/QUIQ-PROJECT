@@ -11,19 +11,20 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [angleX, setAngleX] = useState(0);
+  const [angleY, setAngleY] = useState(0);
 
   const handleLogout = () => {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
         console.log("User signed out");
-        navigate("/")
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error signing out:", error);
       });
   };
-  
 
   const getUser = async (token) => {
     try {
@@ -67,17 +68,43 @@ const Home = () => {
     };
   }, []);
 
+  const handleMouseMove = (event) => {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const offsetX = event.clientX - centerX;
+    const offsetY = event.clientY - centerY;
+
+    const maxAngle = 15;
+    let angleX = 0;
+    let angleY = 0;
+
+    if (offsetY !== 0) {
+      angleX = (offsetY / centerY) * maxAngle;
+    } else if (offsetX !== 0) {
+      angleX = (offsetX / centerX) * maxAngle;
+    }
+
+    if (offsetX !== 0) {
+      angleY = (offsetX / centerX) * maxAngle;
+    } else if (offsetY !== 0) {
+      angleY = (offsetY / centerY) * maxAngle;
+    }
+
+    setAngleX(angleX);
+    setAngleY(angleY);
+  };
+
   if (loading) {
-    return <div></div>;
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return;
+    return <div>Error: {error}</div>;
   }
 
   return (
     <>
-      <div className="relative md:mx-12">
+      <div className="relative md:mx-12" onMouseMove={handleMouseMove}>
         <div className="relative">
           {/* Display cover photo */}
           {userData && userData.cover_photo && (
@@ -85,6 +112,9 @@ const Home = () => {
               src={userData.cover_photo}
               alt="Cover Photo"
               className="w-full border-4 h-80 rounded-2xl drop-shadow-xl"
+              style={{
+                transform: `rotateX(${angleX}deg) rotateY(${angleY}deg)`,
+              }}
             />
           )}
           {/* Logout button */}
@@ -100,27 +130,24 @@ const Home = () => {
           <img
             src={userData.profile_photo}
             alt="Profile Photo"
-            className="drop-shadow-xl absolute top-48 left-[50%] -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black"
+            className="drop-shadow-xl absolute top-48 left-[45%] -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black"
+            style={{
+              transform: `rotateX(${angleX}deg) rotateY(${angleY}deg)`,
+            }}
           />
         )}
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-10 mt-4">
           <div className="text-center md:text-left">
             <h1 className="my-3 text-lg md:text-2xl font-bold">
               {userData.name.toUpperCase()}
             </h1>
-            <h1 className="my-3 text-lg md:text-2xl font-bold">
-              {userData.country.toUpperCase()}
-            </h1>
-            <h1 className="my-3 text-lg md:text-2xl font-bold">
-              {userData.email.toUpperCase()}
-            </h1>
-            <h1 className="my-3 text-lg md:text-2xl font-bold">
+            <h1 className="my-3 text-lg md:text-xl ">{userData.country}</h1>
+            <h1 className="my-3 text-lg md:text-xl ">{userData.email}</h1>
+            <h1 className="my-3 text-lg md:text-xl ">
               {userData.phone_number}
             </h1>
-            <h1 className="my-3 text-md">
-              {userData.bio}
-            </h1>
+            <h1 className="my-3 text-md md:pr-24">{userData.bio}</h1>
           </div>
           <div className="col-span-2 md:col-span-1 text-center">
             <div className="flex flex-col items-center">
