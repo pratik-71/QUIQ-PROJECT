@@ -1,5 +1,5 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import firebase_app, { auth } from "../../Firebase";
@@ -26,7 +26,6 @@ const Register = () => {
     };
   };
 
-
   const sendUserData = async (uid, formData) => {
     try {
       const response = await axios.post("http://localhost:3001/api/user/adduser", {
@@ -47,7 +46,6 @@ const Register = () => {
       console.log(error);
     }
   };
-  
 
   const loginWithGoogle = async (formData) => {
     await signInWithPopup(firebaseAuth, provider).then((userCred) => {
@@ -57,7 +55,6 @@ const Register = () => {
       }
     });
   };
-  
 
   const {
     register,
@@ -93,7 +90,7 @@ const Register = () => {
         <form onSubmit={handleSubmit(sendFormData)}>
           <div className="flex flex-wrap mx-3 mt-3">
             {/*  Name*/}
-            <div className="w-full px-3 mb-3">
+            <div className="w-full md:w-1/2 px-3 mb-3">
               <input
                 id="Name"
                 name="Name"
@@ -110,7 +107,7 @@ const Register = () => {
             </div>
 
             {/* phone number */}
-            <div className="w-full px-3 mb-3">
+            <div className="w-full md:w-1/2 px-3 mb-3">
               <input
                 id="Phone_number"
                 name="Phone_number"
@@ -329,7 +326,7 @@ const Register = () => {
           </div>
         </form>
 
-        <div className="flex flex-col items-center justify-evenly w-full mt-2">
+        <div className="flex flex-col items-center justify-evenly w-full ">
               <p>Or sign up with</p>
               <button onClick={loginWithGoogle} className="flex mt-3 items-center appearance-none border-2 border-black rounded-xl px-4 py-1">
                 <img

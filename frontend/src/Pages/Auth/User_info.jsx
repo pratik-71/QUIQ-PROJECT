@@ -50,7 +50,7 @@ const User_info = () => {
         cover_photo: coverimg
       });
       if (response) {
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -184,7 +184,7 @@ const User_info = () => {
                 defaultValue=""
               >
                 <option disabled value="">
-                  Select your product category
+                  Select your Country
                 </option>
                 {countryList.map((country) => (
                   <option key={country} value={country}>
