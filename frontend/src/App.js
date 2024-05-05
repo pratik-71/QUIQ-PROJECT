@@ -10,15 +10,21 @@ import { getAuth } from "firebase/auth";
 import View_profile from "./Pages/Home/View_profile";
 
 function App() {
+
+  
   const firebaseAuth = getAuth(firebase_app);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [usertoken,setusertoken] = useState("")
 
+
+  // validate user token from firebase
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged((usercred) => {
       if (usercred) {
         usercred.getIdToken().then((token) => {
           window.localStorage.setItem("isLoggedIn", true);
+          setusertoken(token)
           setIsLoggedIn(true);
           setIsLoading(false); 
         });
@@ -44,7 +50,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/" element={isLoggedIn ? <Home token={usertoken} /> : <Navigate to="/login" />} />
           <Route path="/:name" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
           <Route path="/user/:name" element={<View_profile/>}/>
           <Route path="/login" element={<Login />} key="login" />

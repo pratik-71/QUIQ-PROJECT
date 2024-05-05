@@ -15,6 +15,8 @@ const Update_modal = ({ token, onClose }) => {
   const [coverimg, setCoverImg] = useState("");
   const navigate = useNavigate();
 
+
+//   convert image to base 64
   const convertToBase64 = (file, setImage) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -25,7 +27,9 @@ const Update_modal = ({ token, onClose }) => {
       console.log("Error" + error);
     };
   };
+ 
 
+  // update user over databse
   const send_form_data = async (formData) => {
     try {
       const response = await axios.put("http://localhost:3001/api/user/update_user", {
@@ -71,6 +75,8 @@ const Update_modal = ({ token, onClose }) => {
             </svg>
           </button>
         </div>
+
+        {/* ------------- Update user form ----------------------- */}
         <form onSubmit={handleSubmit(send_form_data)}>
           <div className="flex flex-wrap mx-3 mt-3">
 
@@ -99,6 +105,7 @@ const Update_modal = ({ token, onClose }) => {
                   )}
                 </div>
 
+
                 {/* Cover photo */}
                 <div className="w-full mb-3 md:mb-0 md:w-1/2 md:pl-2">
                   <label htmlFor="Cover_photo" className="text-black mt-2 block">
@@ -122,6 +129,9 @@ const Update_modal = ({ token, onClose }) => {
                 </div>
               </div>
             </div>
+
+
+            {/* Country */}
             <div className="w-full px-3 mb-3">
               <select
                 {...register("Country", {
@@ -145,6 +155,7 @@ const Update_modal = ({ token, onClose }) => {
             </div>
 
 
+              {/* Bio */}
             <div className="w-full px-3 mb-3">
               <textarea
                 id="Bio"
@@ -161,6 +172,9 @@ const Update_modal = ({ token, onClose }) => {
                 <p className="text-red-500 text-sm">{errors.Bio.message}</p>
               )}
             </div>
+
+
+            {/* Gender */}
             <div className="mx-4 mb-3 w-full">
               <h3 className="text-black text-lg">Select Your Gender</h3>
               <form
@@ -207,6 +221,8 @@ const Update_modal = ({ token, onClose }) => {
                 <p className="text-red-500 text-sm">{errors.Gender.message}</p>
               )}
             </div>
+
+            {/* button to update user */}
             <div className="w-full px-3 mb-3">
               <button
                 type="submit"

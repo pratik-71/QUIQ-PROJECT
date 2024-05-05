@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import QR_generator from "../../Component/QR_generator";
 import Update_modal from "../Auth/Update_modal";
 
-const Home = () => {
-  const firebaseAuth = getAuth(firebase_app);
+const Home = ({token}) => {
+
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,6 +17,8 @@ const Home = () => {
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [usertoken,setusertoken] = useState("")
 
+
+  // logout user
   const handleLogout = () => {
     const auth = getAuth();
     signOut(auth)
@@ -29,10 +31,14 @@ const Home = () => {
       });
   };
 
+
+  // handle edit profile modal
   const handleEditProfileClick = () => {
     setShowEditProfileModal(true);
   };
 
+
+  // get user details from server
   const getUser = async (token) => {
     try {
       const response = await axios.get(
@@ -52,30 +58,15 @@ const Home = () => {
     }
   };
 
+
+  // get token from firebase
   useEffect(() => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
-        user
-          .getIdToken()
-          .then((token) => {
             setusertoken(token)
             getUser(token);
-          })
-          .catch((error) => {
-            setError("Error getting Firebase ID token");
-            setLoading(false);
-          });
-      } else {
-        console.log("No user available");
-        setLoading(false);
-      }
-    });
+    },[]);
 
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
+  //  handle image parallax effect here
   const handleMouseMove = (event) => {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
@@ -102,18 +93,23 @@ const Home = () => {
     setAngleY(angleY);
   };
 
+
+  // thing takes time to load so till show this window
   if (loading) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div></div>;
   }
 
   return (
     <>
       <div className="relative md:mx-12" onMouseMove={handleMouseMove}>
         <div className="relative">
+
+
+
           {/* Display cover photo */}
           {userData && userData.cover_photo && (
             <img
@@ -125,6 +121,9 @@ const Home = () => {
               }}
             />
           )}
+
+
+
           {/* Logout button */}
           <button
             className="absolute top-0 right-2 mt-2 ml-2 text-white bg-red-500 px-2 py-1 md:px-4 md:py-2 rounded-md"
@@ -133,6 +132,8 @@ const Home = () => {
             Logout
           </button>
         </div>
+
+
         {/* Display profile photo */}
         {userData && userData.profile_photo && (
           <img
@@ -143,9 +144,13 @@ const Home = () => {
         )}
       
 
+        
+        {/*  --------------- Grid structure to displau ser data ------------------ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-10 mt-4">
           <div className="text-center md:pr-24 md:text-left">
             
+
+            {/*  handle update profile modal  */}
           <button o onClick={handleEditProfileClick}
           className="my-5 md:my-0 border-0 px-4 py-1 text-white bg-blue-500 rounded-xl" >Edit Profile</button>
           {
@@ -153,6 +158,8 @@ const Home = () => {
                 <Update_modal token={usertoken} onClose={() => setShowEditProfileModal(false)} />
               )
             }
+
+
             <h1 className="my-3 text-lg md:text-2xl font-bold">
               {userData.name.toUpperCase()}
             </h1>
@@ -163,6 +170,8 @@ const Home = () => {
             </h1>
             <h1 className="my-3 text-md ">{userData.bio}</h1>
           </div>
+
+          {/* Generate QR code here */}
           <div className="col-span-2 md:col-span-1 text-center">
             <div className="flex flex-col items-center">
               <QR_generator />

@@ -24,6 +24,8 @@ const User_info = () => {
   const [coverimg, setCoverImg] = useState("");
   const navigate = useNavigate()
 
+
+  // convert image to base 64
   const convertToBase64 = (file, setImage) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -35,7 +37,8 @@ const User_info = () => {
     };
   };
 
-
+ 
+  // add user to database
   const send_form_data = async ( formData) => {
     try {
       const response = await axios.post("http://localhost:3001/api/user/adduser", {
@@ -80,9 +83,13 @@ const User_info = () => {
         <div className="text-center">
           <h2 className="text-4xl tracking-tight">Personal Info</h2>
         </div>
+   
 
+   {/* ------------- Form to provide personal details  ----------------------- */}
         <form onSubmit={handleSubmit(send_form_data)}>
           <div className="flex flex-wrap mx-3 mt-3">
+
+
             {/*  Name*/}
             <div className="w-full px-3 mb-3">
               <input
@@ -99,6 +106,8 @@ const User_info = () => {
                 <p className="text-red-500 text-sm">{errors.Name.message}</p>
               )}
             </div>
+
+
 
             {/* phone number */}
             <div className="w-full px-3 mb-3">
@@ -127,6 +136,8 @@ const User_info = () => {
               )}
             </div>
 
+
+
              {/* profile photo */}
              <div className="w-full px-3 mb-3">
               <div className="flex flex-wrap justify-between">
@@ -150,6 +161,8 @@ const User_info = () => {
                     </p>
                   )}
                 </div>
+
+
 
                 {/* Cover photo  */}
                 <div className="w-full mb-3 md:mb-0 md:w-1/2 md:pl-2">
@@ -175,6 +188,8 @@ const User_info = () => {
               </div>
             </div>
 
+
+            {/* country */}
             <div className="w-full px-3 mb-3">
               <select
                 {...register("Country", {
@@ -197,6 +212,8 @@ const User_info = () => {
               )}
             </div>
 
+
+             {/* Bio */}
             <div className="w-full px-3 mb-3">
               <textarea
                 id="Bio"
@@ -214,6 +231,8 @@ const User_info = () => {
               )}
             </div>
 
+
+             {/* Gender */}
             <div className="mx-4 mb-3 w-full">
               <h3 className="text-black text-lg">Select Your Gender</h3>
               <form
@@ -261,6 +280,8 @@ const User_info = () => {
               )}
             </div>
 
+
+            {/* button to sub,it user details */}
             <div className="w-full px-3 mb-3">
               <button
                 type="submit"

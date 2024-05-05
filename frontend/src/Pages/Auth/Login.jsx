@@ -19,6 +19,8 @@ const Login = () => {
     formState: { errors },
   } = useForm();
    
+  
+  // check is user exist in databse if not redirect him to user_info page
   const userexist = async(data)=>{
     try {
       console.log("token is = ",data.user.accessToken)
@@ -40,6 +42,9 @@ const Login = () => {
     }
   }
 
+
+
+  // login user
   const send_form_data = async (formData) => {
     const { Email, Password } = formData;
     try {
@@ -56,6 +61,8 @@ const Login = () => {
     }
   };
 
+
+  // login with google
   const LoginWithGoogle=async()=>{
     await signInWithPopup(firebaseAuth,provider).then((userCred)=>{
      if(userCred){
@@ -95,13 +102,20 @@ const Login = () => {
           </a>
         </span>
       </div>
+      
 
+
+m      {/* ------------- Form for login ----------------------- */}
       <div className="flex justify-center my-2 mx-4 md:mx-0">
+        
         <form
           className="w-full max-w-xl bg-white rounded-lg shadow-md p-6"
           onSubmit={handleSubmit(send_form_data)}
         >
           <div className="flex flex-wrap -mx-3 mb-6">
+
+
+            {/* login */}
             <div className="w-full md:w-full px-3 mb-6">
               <label
                 htmlFor="email"
@@ -129,6 +143,8 @@ const Login = () => {
               )}
             </div>
 
+
+            {/* passoword */}
             <div className="w-full md:w-full px-3 mb-6">
               <label
                 htmlFor="password"
@@ -154,22 +170,8 @@ const Login = () => {
               )}
             </div>
 
-            <div className="w-full flex items-center justify-between px-3 mb-3 ">
-              <label htmlFor="remember" className="flex items-center w-1/2">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  className="mr-1 bg-white shadow"
-                />
-                <span className="text-sm text-gray-700 pt-1">Remember Me</span>
-              </label>
-              <div className="w-1/2 text-right">
-                <a href="#" className="text-blue-500 text-sm tracking-tight">
-                  Forget your password?
-                </a>
-              </div>
-            </div>
 
+              {/* ------------- Sign in Button ----------------------- */}
             <div className="w-full md:w-full px-3 mb-6">
               <button
                 type="submit"
@@ -179,6 +181,8 @@ const Login = () => {
               </button>
             </div>
 
+
+             {/* ------------- Code to Sign Up with Google ----------------------- */}
             <div className="flex flex-col items-center justify-evenly w-full mt-2">
               <p>Or sign up with</p>
               <button onClick={()=>LoginWithGoogle()} className="flex mt-3 items-center appearance-none border-2 border-black rounded-xl px-4 py-1">

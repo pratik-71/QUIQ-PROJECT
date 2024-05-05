@@ -8,13 +8,17 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+
   const navigate = useNavigate();
   const firebaseAuth = getAuth(firebase_app);
   const provider = new GoogleAuthProvider();
+   
 
   const [profileimg, setProfileImg] = useState("");
   const [coverimg, setCoverImg] = useState("");
 
+
+  // convert image to base-64 url format to send over databse
   const convertToBase64 = (file, setImage) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -25,7 +29,10 @@ const Register = () => {
       console.log("Error" + error);
     };
   };
+ 
 
+
+  // Registration form
   const sendUserData = async (uid, formData) => {
     try {
       const response = await axios.post("http://localhost:3001/api/user/adduser", {
@@ -47,6 +54,8 @@ const Register = () => {
     }
   };
 
+
+  // login with google form
   const loginWithGoogle = async (formData) => {
     await signInWithPopup(firebaseAuth, provider).then((userCred) => {
       if (userCred) {
@@ -61,7 +70,10 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  
 
+
+  // register user in firebase 
   const sendFormData = async (formData) => {
     try {
       const response = await createUserWithEmailAndPassword(auth, formData.Email, formData.Password);
@@ -87,6 +99,8 @@ const Register = () => {
           </span>
         </div>
 
+
+        {/* ------------- Code to Register new user ----------------------- */}
         <form onSubmit={handleSubmit(sendFormData)}>
           <div className="flex flex-wrap mx-3 mt-3">
             {/*  Name*/}
@@ -105,6 +119,7 @@ const Register = () => {
                 <p className="text-red-500 text-sm">{errors.Name.message}</p>
               )}
             </div>
+
 
             {/* phone number */}
             <div className="w-full md:w-1/2 px-3 mb-3">
@@ -133,6 +148,7 @@ const Register = () => {
               )}
             </div>
 
+
             {/* email */}
             <div className="w-full px-3 mb-3">
               <input
@@ -155,6 +171,7 @@ const Register = () => {
               )}
             </div>
 
+
             {/* password */}
             <div className="w-full px-3">
               <input
@@ -173,6 +190,7 @@ const Register = () => {
                 </p>
               )}
             </div>
+
 
             
              {/* profile photo */}
@@ -199,6 +217,7 @@ const Register = () => {
                   )}
                 </div>
 
+
                 {/* Cover photo  */}
                 <div className="w-full mb-3 md:mb-0 md:w-1/2 md:pl-2">
                   <label htmlFor="Cover_photo" className="text-black mt-2 block">
@@ -223,7 +242,8 @@ const Register = () => {
               </div>
             </div>
 
-
+            
+            {/* country */}
             <div className="w-full px-3 mb-3">
               <select
                 {...register("Country", {
@@ -247,6 +267,7 @@ const Register = () => {
             </div>
 
 
+            {/* Bio */}
             <div className="w-full px-3 mb-3">
               <textarea
                 id="Bio"
@@ -265,6 +286,7 @@ const Register = () => {
             </div>
 
 
+            {/* Gender */}
             <div className="mx-4 mb-3 w-full">
               <h3 className="text-black text-lg">Select Your Gender</h3>
               <form
@@ -312,6 +334,8 @@ const Register = () => {
               )}
             </div>
 
+
+            {/* ----------------- Button to sign up ------------ */}
             <div className="w-full px-3 mb-3">
               <button
                 type="submit"
@@ -319,13 +343,12 @@ const Register = () => {
               >
                 Sign Up
               </button>
-            </div>
-
-            {/* google sign up */}
-            
+            </div>          
           </div>
         </form>
+          
 
+        {/* ------------- Sign Up with Google ----------------------- */}  
         <div className="flex flex-col items-center justify-evenly w-full ">
               <p>Or sign up with</p>
               <button onClick={loginWithGoogle} className="flex mt-3 items-center appearance-none border-2 border-black rounded-xl px-4 py-1">

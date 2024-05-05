@@ -11,6 +11,8 @@ const View_profile = () => {
   const [angleX, setAngleX] = useState(0);
   const [angleY, setAngleY] = useState(0);
 
+
+  // get user details from databse
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -24,7 +26,9 @@ const View_profile = () => {
         setLoading(false);
       }
     };
+ 
 
+    // handle text paraallax effect
     const handleMouseMove = (event) => {
       // Calculate distances from the mouse pointer to the center of the screen
       const centerX = window.innerWidth / 2;
@@ -63,6 +67,8 @@ const View_profile = () => {
     };
   }, []);
 
+
+  // loading 
   if (loading) {
     return null;
   }
@@ -77,6 +83,8 @@ const View_profile = () => {
         {userData && (
           <>
             <div>
+
+
               {/* Display cover photo */}
               {userData.cover_photo && (
                 <img
@@ -89,6 +97,8 @@ const View_profile = () => {
                 />
               )}
 
+
+
               {/* Display profile photo */}
               {userData.profile_photo && (
                 <img
@@ -98,6 +108,9 @@ const View_profile = () => {
                 />
               )}
             </div>
+
+             
+             {/* --------------- Grid structure to display user data ------------ */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-10 mt-4">
               <div className="text-center md:text-left">
                 <h1 className="my-3 text-lg md:text-2xl font-bold">
@@ -108,6 +121,9 @@ const View_profile = () => {
                 </h1>
                 <h1 className="my-3 text-md">{userData.bio}</h1>
               </div>
+
+
+              {/* Generate QR code  */}
               <div className="col-span-2 md:col-span-1 text-center">
                 <div className="flex flex-col items-center">
                   <QR_generator />
