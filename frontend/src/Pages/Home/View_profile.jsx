@@ -33,7 +33,7 @@ const View_profile = () => {
       const offsetY = event.clientY - centerY;
 
       // Calculate tilt angles based on mouse position
-      const maxAngle = 15; // Maximum tilt angle
+      const maxAngle = 10; // Maximum tilt angle
       let angleX = 0;
       let angleY = 0;
 
