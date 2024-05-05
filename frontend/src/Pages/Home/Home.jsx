@@ -130,10 +130,7 @@ const Home = () => {
           <img
             src={userData.profile_photo}
             alt="Profile Photo"
-            className="drop-shadow-xl absolute top-48 left-[45%] -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black"
-            style={{
-              transform: `rotateX(${angleX}deg) rotateY(${angleY}deg)`,
-            }}
+            className="drop-shadow-xl absolute top-48 left-[50%] -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black"
           />
         )}
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import QR_generator from '../../Component/QR_generator';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import QR_generator from "../../Component/QR_generator";
 
 const View_profile = () => {
   const [userData, setUserData] = useState(null);
@@ -14,7 +14,9 @@ const View_profile = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/user/${name}`);
+        const response = await axios.get(
+          `http://localhost:3001/api/user/${name}`
+        );
         setUserData(response.data);
       } catch (error) {
         setError("Error fetching user info");
@@ -37,9 +39,9 @@ const View_profile = () => {
 
       // Calculate angle for X-axis
       if (offsetY !== 0) {
-        angleX = (offsetY / centerX) * maxAngle;
+        angleX = (offsetY / centerY) * maxAngle;
       } else if (offsetX !== 0) {
-        angleX = (offsetX / centerY) * maxAngle;
+        angleX = (offsetX / centerX) * maxAngle;
       }
 
       // Calculate angle for Y-axis
@@ -54,10 +56,10 @@ const View_profile = () => {
     };
 
     getUser();
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -71,7 +73,7 @@ const View_profile = () => {
 
   return (
     <>
-      <div className='relative md:mx-12'>
+      <div className="relative md:mx-12">
         {userData && (
           <>
             <div>
@@ -80,8 +82,10 @@ const View_profile = () => {
                 <img
                   src={userData.cover_photo}
                   alt="Cover Photo"
-                  className='w-full border-4 h-80 rounded-2xl drop-shadow-xl '
-                  style={{ transform: `rotateX(${angleX}deg) rotateY(${angleY}deg)` }}
+                  className="w-full border-4 h-80 rounded-2xl drop-shadow-xl"
+                  style={{
+                    transform: `rotateX(${angleX}deg) rotateY(${angleY}deg)`,
+                  }}
                 />
               )}
 
@@ -90,8 +94,7 @@ const View_profile = () => {
                 <img
                   src={userData.profile_photo}
                   alt="Profile Photo"
-                  className='drop-shadow-xl absolute top-48 left-[45%] left-1/2 transform -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black'
-                  style={{ transform: `rotateX(${angleX}deg) rotateY(${angleY}deg)` }}
+                  className="drop-shadow-xl absolute top-48 left-[50%] -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black"
                 />
               )}
             </div>
@@ -100,7 +103,7 @@ const View_profile = () => {
                 <h1 className="my-3 text-lg md:text-2xl font-bold">
                   {userData.name.toUpperCase()}
                 </h1>
-                <h1 className="my-3 text-lg md:text-2xl font-bold">
+                <h1 className="my-3 text-lg md:text-xl">
                   {userData.country.toUpperCase()}
                 </h1>
                 <h1 className="my-3 text-md">{userData.bio}</h1>
@@ -116,6 +119,6 @@ const View_profile = () => {
       </div>
     </>
   );
-}
+};
 
 export default View_profile;
