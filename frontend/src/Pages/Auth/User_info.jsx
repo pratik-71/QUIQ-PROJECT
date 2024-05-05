@@ -11,6 +11,9 @@ const User_info = () => {
   const uid = location.state.uid;
   const email = location.state.email;
 
+  console.log(uid)
+  console.log(email)
+
   const {
     register,
     handleSubmit,
@@ -41,6 +44,7 @@ const User_info = () => {
         phone_number: formData.Phone_number,
         country: formData.Country,
         uid:uid,
+        bio:formData.Bio,
         gender: formData.Gender,
         profile_photo: profileimg,
         cover_photo: coverimg
@@ -184,6 +188,23 @@ const User_info = () => {
               </select>
               {errors.Country && (
                 <p className="text-red-500 text-sm">{errors.Country.message}</p>
+              )}
+            </div>
+
+            <div className="w-full px-3 mb-3">
+              <textarea
+                id="Bio"
+                name="Bio"
+                type="Bio"
+                placeholder="Enter Something about yourself"
+                autoComplete="Bio"
+                {...register("Bio", {
+                  required: "Bio is required"
+                })}
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+              ></textarea>
+              {errors.Bio && (
+                <p className="text-red-500 text-sm">{errors.Bio.message}</p>
               )}
             </div>
 

@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
+    bio:{
+        type: String
+    },
     country: {
         type: String,
         required: true,

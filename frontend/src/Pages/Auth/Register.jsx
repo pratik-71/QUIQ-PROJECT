@@ -34,6 +34,7 @@ const Register = () => {
         email: formData.Email,
         phone_number: formData.Phone_number,
         uid:uid,
+        bio:formData.Bio,
         country: formData.Country,
         gender: formData.Gender,
         profile_photo: profileimg,
@@ -52,7 +53,7 @@ const Register = () => {
     await signInWithPopup(firebaseAuth, provider).then((userCred) => {
       if (userCred) {
         window.localStorage.setItem("isLoggedIn", true);
-        navigate("/user_info", { state: { uid: userCred.user.uid,email:formData.Email } });
+        navigate("/user_info", { state: { uid: userCred.user.uid,email:userCred.user.email } });
       }
     });
   };
@@ -241,6 +242,25 @@ const Register = () => {
                 <p className="text-red-500 text-sm">{errors.Country.message}</p>
               )}
             </div>
+
+
+            <div className="w-full px-3 mb-3">
+              <textarea
+                id="Bio"
+                name="Bio"
+                type="Bio"
+                placeholder="Enter Something about yourself"
+                autoComplete="Bio"
+                {...register("Bio", {
+                  required: "Bio is required"
+                })}
+                className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
+              ></textarea>
+              {errors.Bio && (
+                <p className="text-red-500 text-sm">{errors.Bio.message}</p>
+              )}
+            </div>
+
 
             <div className="mx-4 mb-3 w-full">
               <h3 className="text-black text-lg">Select Your Gender</h3>

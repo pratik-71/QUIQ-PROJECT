@@ -55,7 +55,7 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return;
+    return <div></div>;
   }
 
   if (error) {
@@ -88,7 +88,7 @@ const Home = () => {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-10 mt-4">
-          <div className="text-center">
+          <div className="text-center md:text-left">
             <h1 className="my-3 text-lg md:text-2xl font-bold">
               {userData.name.toUpperCase()}
             </h1>
@@ -100,6 +100,9 @@ const Home = () => {
             </h1>
             <h1 className="my-3 text-lg md:text-2xl font-bold">
               {userData.phone_number}
+            </h1>
+            <h1 className="my-3 text-md">
+              {userData.bio}
             </h1>
           </div>
           <div className="col-span-2 md:col-span-1 text-center">
