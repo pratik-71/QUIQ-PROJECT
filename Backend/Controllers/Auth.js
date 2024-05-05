@@ -24,17 +24,23 @@ const add_user = async (req, res) => {
     }
 };
 
-const get_user = async(req,res)=>{
-    const uid = req.user
-     try {
-        const data = await User.findOne({uid:uid})
-        if(data){
-            return res.status(200).json(data)
+
+const get_user = async (req, res) => {
+    const uid = req.user;
+    console.log("uid = ", uid);
+    try {
+        const data = await User.findOne({ uid: uid });
+        if (data) {
+            return res.status(200).json(data);
+        } else {
+            return res.status(404).json({ error: "User not found" });
         }
-     } catch (error) {
-        return res.status(400).json({error:"No user Found"})
-     }
-}
+    } catch (error) {
+        console.log("Error thrown:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
 
 const get_profile=async(req,res)=>{
     const name = req.params.name

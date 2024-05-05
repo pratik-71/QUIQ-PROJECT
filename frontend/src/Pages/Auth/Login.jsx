@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import firebase_app, { auth } from "../../Firebase";
 import {getAuth,GoogleAuthProvider,signInWithEmailAndPassword,signInWithPopup} from "firebase/auth"
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 const Login = () => {
@@ -17,7 +18,27 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+   
+  const userexist = async(data)=>{
+    try {
+      console.log("token is = ",data.user.accessToken)
+      const response = await axios.get(
+        "http://localhost:3001/api/user/user_info",
+        {
+          headers: {
+            Authorization: "Bearer " + data.user.accessToken,
+          },
+        }
+      );
+      if(response){
+        console.log("here it comes")
+        navigate("/")
+      }
+    } catch (error) {
+      console.log("here it comes with error")
+      navigate("/user_info", { state: { uid: data.user.uid,email:data.user.email } });
+    }
+  }
 
   const send_form_data = async (formData) => {
     const { Email, Password } = formData;
@@ -27,7 +48,6 @@ const Login = () => {
         window.localStorage.setItem("isLoggedIn", true);
         console.log(cred)
         navigate("/")
-
       }
 
       
@@ -40,7 +60,7 @@ const Login = () => {
     await signInWithPopup(firebaseAuth,provider).then((userCred)=>{
      if(userCred){
        window.localStorage.setItem("isLoggedIn",true);
-       navigate("/")
+       userexist(userCred)
      }
     })
    }

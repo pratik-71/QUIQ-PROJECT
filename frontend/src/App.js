@@ -17,12 +17,10 @@ function App() {
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged((usercred) => {
       if (usercred) {
-        console.log(usercred)
         usercred.getIdToken().then((token) => {
           window.localStorage.setItem("isLoggedIn", true);
           setIsLoggedIn(true);
           setIsLoading(false); 
-          console.log(token);
         });
       } else {
         window.localStorage.setItem("isLoggedIn", false);
