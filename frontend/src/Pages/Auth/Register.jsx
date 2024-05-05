@@ -189,6 +189,9 @@ const Register = () => {
                     name="profile_photo"
                     type="file"
                     accept=".png, .jpg, .jpeg"
+                    {...register("Profile_photo", {
+                      required: "Profile_photo is required",
+                    })}
                     onChange={(e) => convertToBase64(e.target.files[0], setProfileImg)}
                     className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"
                   />
@@ -207,6 +210,9 @@ const Register = () => {
                   <input
                     name="cover_photo"
                     type="file"
+                    {...register("Cover_photo", {
+                      required: "Cover_photo is required",
+                    })}
                     accept=".png, .jpg, .jpeg"
                     onChange={(e) => convertToBase64(e.target.files[0], setCoverImg)}
                     className="appearance-none block w-full bg-white text-gray-900 font-medium border border-gray-400 rounded-lg py-3 px-3 leading-tight focus:outline-none"

@@ -4,6 +4,7 @@ import firebase_app from "../../Firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import QR_generator from "../../Component/QR_generator";
+import Update_modal from "../Auth/Update_modal";
 
 const Home = () => {
   const firebaseAuth = getAuth(firebase_app);
@@ -13,6 +14,8 @@ const Home = () => {
   const navigate = useNavigate();
   const [angleX, setAngleX] = useState(0);
   const [angleY, setAngleY] = useState(0);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const [usertoken,setusertoken] = useState("")
 
   const handleLogout = () => {
     const auth = getAuth();
@@ -24,6 +27,10 @@ const Home = () => {
       .catch((error) => {
         console.error("Error signing out:", error);
       });
+  };
+
+  const handleEditProfileClick = () => {
+    setShowEditProfileModal(true);
   };
 
   const getUser = async (token) => {
@@ -51,6 +58,7 @@ const Home = () => {
         user
           .getIdToken()
           .then((token) => {
+            setusertoken(token)
             getUser(token);
           })
           .catch((error) => {
@@ -133,9 +141,18 @@ const Home = () => {
             className="drop-shadow-xl absolute top-48 left-[50%] -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black"
           />
         )}
+      
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-10 mt-4">
-          <div className="text-center md:text-left">
+          <div className="text-center md:pr-24 md:text-left">
+            
+          <button o onClick={handleEditProfileClick}
+          className="my-5 md:my-0 border-0 px-4 py-1 text-white bg-blue-500 rounded-xl" >Edit Profile</button>
+          {
+              showEditProfileModal && (
+                <Update_modal token={usertoken} onClose={() => setShowEditProfileModal(false)} />
+              )
+            }
             <h1 className="my-3 text-lg md:text-2xl font-bold">
               {userData.name.toUpperCase()}
             </h1>
@@ -144,7 +161,7 @@ const Home = () => {
             <h1 className="my-3 text-lg md:text-xl ">
               {userData.phone_number}
             </h1>
-            <h1 className="my-3 text-md md:pr-24">{userData.bio}</h1>
+            <h1 className="my-3 text-md ">{userData.bio}</h1>
           </div>
           <div className="col-span-2 md:col-span-1 text-center">
             <div className="flex flex-col items-center">

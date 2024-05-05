@@ -1,6 +1,7 @@
 const User = require("../Models/User_model");
 
 const add_user = async (req, res) => {
+    
     try {
         const { name, email,bio, phone_number, country, gender,uid, profile_photo,cover_photo } = req.body;
         const user = new User({
@@ -54,4 +55,31 @@ const get_profile=async(req,res)=>{
      }
 }
 
-module.exports = { add_user,get_user,get_profile };
+const update_user = async (req, res) => {
+    try {
+        const uid = req.user
+        const { bio, country, gender, profile_photo, cover_photo } = req.body;
+
+        const user = await User.findOne({ uid });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        user.bio = bio;
+        user.country = country;
+        user.gender = gender;
+        user.profile_photo = profile_photo;
+        user.cover_photo = cover_photo;
+
+        const savedUser = await user.save();
+
+        res.status(200).json({ success: true, user: savedUser });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ success: false, message: 'Failed to update user' });
+    }
+};
+
+
+module.exports = { add_user,get_user,get_profile,update_user };
