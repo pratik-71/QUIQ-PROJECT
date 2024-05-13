@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import QR_generator from "../../Component/QR_generator";
+import Loader from "../../Component/Loader";
 
 const View_profile = () => {
   const [userData, setUserData] = useState(null);
@@ -30,6 +31,7 @@ const View_profile = () => {
 
     // handle text paraallax effect
     const handleMouseMove = (event) => {
+      
       // Calculate distances from the mouse pointer to the center of the screen
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
@@ -70,7 +72,7 @@ const View_profile = () => {
 
   // loading 
   if (loading) {
-    return null;
+    return <div><Loader/></div>;
   }
 
   if (error) {

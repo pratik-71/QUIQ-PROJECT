@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import QR_generator from "../../Component/QR_generator";
 import Update_modal from "../Auth/Update_modal";
+import Loader from "../../Component/Loader";
 
 const Home = ({token}) => {
 
@@ -15,7 +16,6 @@ const Home = ({token}) => {
   const [angleX, setAngleX] = useState(0);
   const [angleY, setAngleY] = useState(0);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
-  const [usertoken,setusertoken] = useState("")
 
 
   // logout user
@@ -51,7 +51,6 @@ const Home = ({token}) => {
       );
       setUserData(response.data);
       setLoading(false);
-      navigate(`/${response.data.name}`);
     } catch (error) {
       setError("Error fetching user info");
       setLoading(false);
@@ -61,7 +60,6 @@ const Home = ({token}) => {
 
   // get token from firebase
   useEffect(() => {
-            setusertoken(token)
             getUser(token);
     },[]);
 
@@ -96,7 +94,7 @@ const Home = ({token}) => {
 
   // thing takes time to load so till show this window
   if (loading) {
-    return <div></div>;
+    return <div><Loader/></div>;
   }
 
   if (error) {
@@ -111,7 +109,6 @@ const Home = ({token}) => {
 
 
           {/* Display cover photo */}
-          {userData && userData.cover_photo && (
             <img
               src={userData.cover_photo}
               alt="Cover Photo"
@@ -120,7 +117,7 @@ const Home = ({token}) => {
                 transform: `rotateX(${angleX}deg) rotateY(${angleY}deg)`,
               }}
             />
-          )}
+          
 
 
 
@@ -135,13 +132,12 @@ const Home = ({token}) => {
 
 
         {/* Display profile photo */}
-        {userData && userData.profile_photo && (
           <img
             src={userData.profile_photo}
             alt="Profile Photo"
             className="drop-shadow-xl absolute top-48 left-[50%] -translate-x-1/2 rounded-full w-40 h-40 md:w-60 md:h-60 border-4 border-black"
           />
-        )}
+        
       
 
         
@@ -155,7 +151,7 @@ const Home = ({token}) => {
           className="my-5 md:my-0 border-0 px-4 py-1 text-white bg-blue-500 rounded-xl" >Edit Profile</button>
           {
               showEditProfileModal && (
-                <Update_modal token={usertoken} onClose={() => setShowEditProfileModal(false)} />
+                <Update_modal token={token} onClose={() => setShowEditProfileModal(false)} />
               )
             }
 
@@ -174,7 +170,7 @@ const Home = ({token}) => {
           {/* Generate QR code here */}
           <div className="col-span-2 md:col-span-1 text-center">
             <div className="flex flex-col items-center">
-              <QR_generator />
+              <QR_generator name={userData.name} />
             </div>
           </div>
         </div>

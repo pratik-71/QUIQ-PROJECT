@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react'; 
-import { useParams } from 'react-router-dom';
 
-const QR_generator = () => {
-    const { name } = useParams();
+const QR_generator = ({name}) => {
     const [showQRCode, setShowQRCode] = useState(false);
 
     const handleButtonClick = () => {

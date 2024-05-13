@@ -86,6 +86,7 @@ const Register = () => {
     }
   };
 
+  
   return (
     <div className="flex items-center justify-center drop-shadow-2xl border-2">
       <div className="w-full max-w-xl bg-white rounded-lg  md:mt-0  py-6">
