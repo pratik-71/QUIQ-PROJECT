@@ -7,8 +7,8 @@ const port = process.env.PORT || 3001
 
 require('dotenv').config();
 
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '60mb' }));
+app.use(bodyParser.urlencoded({ limit: '60mb', extended: true }));
 
 app.use(cors())
 app.use("/api/user",require("./routes/user"))

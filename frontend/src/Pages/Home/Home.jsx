@@ -77,13 +77,15 @@ const Home = ({token}) => {
 
     if (offsetY !== 0) {
       angleX = (offsetY / centerY) * maxAngle;
-    } else if (offsetX !== 0) {
+    } 
+    else if (offsetX !== 0) {
       angleX = (offsetX / centerX) * maxAngle;
     }
 
     if (offsetX !== 0) {
       angleY = (offsetX / centerX) * maxAngle;
-    } else if (offsetY !== 0) {
+    } 
+    else if (offsetY !== 0) {
       angleY = (offsetY / centerY) * maxAngle;
     }
 

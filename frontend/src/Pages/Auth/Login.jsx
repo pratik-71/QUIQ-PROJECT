@@ -23,7 +23,6 @@ const Login = () => {
   // check is user exist in databse if not redirect him to user_info page
   const userexist = async(data)=>{
     try {
-      console.log("token is = ",data.user.accessToken)
       const response = await axios.get(
         "http://localhost:3001/api/user/user_info",
         {

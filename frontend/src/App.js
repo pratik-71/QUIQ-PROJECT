@@ -4,7 +4,7 @@ import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 import User_info from "./Pages/Auth/User_info";
 import Home from "./Pages/Home/Home";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import firebase_app, { auth } from "./Firebase";
 import { getAuth } from "firebase/auth";
 import View_profile from "./Pages/Home/View_profile";
@@ -15,6 +15,7 @@ function App() {
   
   const firebaseAuth = getAuth(firebase_app);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [usertoken,setusertoken] = useState("")
 
 
@@ -26,10 +27,12 @@ function App() {
           window.localStorage.setItem("isLoggedIn", true);
           setusertoken(token)
           setIsLoggedIn(true);
+          setIsLoading(false); 
         });
       } else {
         window.localStorage.setItem("isLoggedIn", false);
         setIsLoggedIn(false);
+        setIsLoading(false); 
       }
     },[]);
 
@@ -40,14 +43,13 @@ function App() {
 
 
   if (isLoading) {
-    return ;
+    return <><Loader/></>;
   }
 
 
   return (
     <div className="App">
       <BrowserRouter>
-      <Suspense fallback={<Loader/>}>
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home token={usertoken} /> : <Navigate to="/login" />} />
           <Route path="/user/:name" element={<View_profile/>}/>
@@ -55,7 +57,6 @@ function App() {
           <Route path="/register" element={<Register />} key="register" />
           <Route path="/user_info" element={isLoggedIn ? <User_info /> : <Navigate to="/login" />} key="user_info" />
         </Routes>
-        </Suspense>
       </BrowserRouter>
     </div>
   );

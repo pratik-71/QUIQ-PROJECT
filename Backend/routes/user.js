@@ -4,6 +4,7 @@ const { add_user, get_user, get_profile, update_user } = require("../Controllers
 const router = express.Router(); 
 
 // Routes that require authentication middleware
+router.get("/getuser", Verify_token, get_user);
 router.get("/user_info", Verify_token, get_user);
 router.put("/update_user",Verify_token,update_user)
 
